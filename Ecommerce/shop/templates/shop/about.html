@@ -1,0 +1,263 @@
+{% extends "shop/base.html" %}
+
+{% block title %}À propos - PremiumShop{% endblock %}
+
+{% block content %}
+<style>
+    /* Global Styles */
+    body {
+        font-family: 'Arial', sans-serif;
+        color: #333;
+        background-color: #f8f9fa;
+    }
+
+    .about-section {
+        margin-top: 60px;
+        padding: 40px 0;
+    }
+
+    /* Header Section */
+    .about-header {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .about-header h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #2d2d2d;
+        margin-bottom: 20px;
+    }
+
+    .about-header p {
+        font-size: 1.2rem;
+        color: #777;
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    /* Team Section */
+    .team-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 40px;
+        margin-top: 60px;
+        padding: 0 20px;
+    }
+
+    .team-member {
+        text-align: center;
+        padding: 30px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .team-member img {
+        border-radius: 50%;
+        width: 180px;
+        height: 180px;
+        object-fit: cover;
+        margin-bottom: 20px;
+    }
+
+    .team-member h5 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .team-member p {
+        font-size: 1rem;
+        color: #777;
+    }
+
+    .team-member:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Mission Section */
+    .mission-section {
+        margin-top: 80px;
+        background-color: #007bff;
+        color: white;
+        padding: 60px 20px;
+        border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .mission-section h2 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+
+    .mission-section p {
+        font-size: 1.2rem;
+        color: #e6f1ff;
+        max-width: 850px;
+        margin: 0 auto;
+    }
+
+    /* Testimonials Section */
+    .testimonials-section {
+        margin-top: 80px;
+        padding: 60px 0;
+        background-color: #f8f9fa;
+        text-align: center;
+    }
+
+    .testimonial-card {
+        display: inline-block;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        background-color: white;
+        border-radius: 10px;
+        margin: 20px;
+        width: 280px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .testimonial-card p {
+        font-size: 1.2rem;
+        color: #555;
+        line-height: 1.5;
+    }
+
+    .testimonial-card h5 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #333;
+        margin-top: 20px;
+    }
+
+    .testimonial-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Newsletter Section */
+    .newsletter-section {
+        background-color: #007bff;
+        color: white;
+        padding: 60px;
+        text-align: center;
+        border-radius: 10px;
+        margin-top: 80px;
+    }
+
+    .newsletter-section input {
+        width: 50%;
+        padding: 15px;
+        margin-right: 10px;
+        border-radius: 5px;
+        border: none;
+    }
+
+    .newsletter-section button {
+        padding: 15px 30px;
+        border-radius: 5px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .newsletter-section button:hover {
+        background-color: #218838;
+    }
+
+    /* History Section */
+    .history-section {
+        margin-top: 60px;
+        text-align: center;
+        font-size: 1.2rem;
+        color: #333;
+    }
+
+    .history-section h2 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+
+    .history-section p {
+        line-height: 1.6;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+</style>
+
+<div class="container about-section">
+    <!-- Header Section -->
+    <div class="about-header">
+        <h1>À propos de PremiumShop</h1>
+        <p>Notre mission est de vous offrir les meilleurs Smartphones au meilleur prix, tout en vous garantissant une expérience d'achat en ligne exceptionnelle.</p>
+    </div>
+
+    <!-- Our Team Section -->
+    <div class="team-section">
+        <div class="team-member">
+            <img src="https://via.placeholder.com/180" alt="">
+            <h5>Jean Dupont</h5>
+            <p>CEO et Fondateur</p>
+        </div>
+        <div class="team-member">
+            <img src="https://via.placeholder.com/180" alt="">
+            <h5>Marie Lemoine</h5>
+            <p>Directrice Marketing</p>
+        </div>
+        <div class="team-member">
+            <img src="https://via.placeholder.com/180" alt="">
+            <h5>Paul Martin</h5>
+            <p>Responsable des Ventes</p>
+        </div>
+    </div>
+
+    <!-- Mission Section -->
+    <div class="mission-section">
+        <h2>Notre Mission</h2>
+        <p>Chez PremiumShop, nous nous engageons à offrir une gamme variée de produits de qualité supérieure à nos clients. Nous plaçons l'innovation et la satisfaction client au cœur de toutes nos actions. Notre objectif est d'être le leader du commerce en ligne, en offrant une expérience d'achat simple, agréable et rapide.</p>
+    </div>
+
+    <!-- Testimonials Section -->
+    <div class="testimonials-section">
+        <h2>Ce que disent nos clients</h2>
+        <div class="testimonial-card">
+            <p>"PremiumShop a changé ma façon de magasiner en ligne. La qualité des produits et la rapidité de la livraison sont impressionnantes!"</p>
+            <h5>Carla G.</h5>
+        </div>
+        <div class="testimonial-card">
+            <p>"Une expérience d'achat sans stress! J'ai trouvé exactement ce que je cherchais, et le service client est exceptionnel."</p>
+            <h5>Michel T.</h5>
+        </div>
+        <div class="testimonial-card">
+            <p>"J'ai recommandé PremiumShop à mes amis et à ma famille, tout le monde est satisfait de leurs produits et services."</p>
+            <h5>Sarah B.</h5>
+        </div>
+    </div>
+
+    <!-- Newsletter Section -->
+    <div class="newsletter-section">
+        <h2>Abonnez-vous à notre newsletter</h2>
+        <p>Restez informé des dernières promotions, nouveautés et tendances sur PremiumShop.</p>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="email" placeholder="Votre adresse email" name="newsletter_email" required>
+            <button type="submit">S'abonner</button>
+        </form>
+    </div>
+
+    <!-- History Section -->
+    <div class="history-section">
+        <h2>Notre Histoire</h2>
+        <p>Fondée en 2020, PremiumShop a rapidement évolué pour devenir l'une des boutiques en ligne les plus fiables du marché. Nous avons commencé avec un petit assortiment de produits électroniques et avons élargi notre gamme pour inclure des vêtements, des accessoires et des articles pour la maison. Nous nous engageons à toujours offrir des produits de haute qualité et un service client irréprochable.</p>
+    </div>
+</div>
+
+{% endblock %}

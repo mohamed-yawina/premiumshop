@@ -1,0 +1,410 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PremiumShop - Mobile Phone Store</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    
+    <!-- Font Awesome pour les icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <!-- jQuery (version complète) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    
+    <style>
+        .navbar-brand {
+            font-size: 1.5rem;
+        }
+        #panier {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+        body {
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                    <a class="navbar-brand font-weight-bold" href="{% url 'home' %}">
+                        <i class="fas fa-store"></i> PremiumShop
+                    </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item active">
+                                <a class="nav-link font-weight-bold" href="{% url 'home' %}">
+                                    <i class="fas fa-home"></i> Accueil
+                                    <span class="sr-only">(current)</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <button id="panier" type="button" class="btn btn-secondary" data-container="body" data-toggle="popover" data-placement="bottom" title="Votre Panier" data-content="Votre panier est vide pour le moment.">
+                                    <i class="fas fa-shopping-cart"></i> Panier (<span class="cart-count">0</span>)
+                                </button>
+                            </li>
+                            
+                            <li class="nav-item mx-1">
+                                <a class="nav-link link-item d-flex align-items-center px-3 py-2 position-relative" href="{% url 'about' %}">
+                                    <i class="fas fa-info-circle me-2 icon"></i>
+                                    <span class="link-text"> About Us</span>
+                                    <span class="hover-underline"></span>
+                                </a>
+                            </li>
+                            
+                            <li class="nav-item mx-1">
+                                <a class="nav-link link-item d-flex align-items-center px-3 py-2 position-relative" href="{% url 'contact' %}">
+                                    <i class="fas fa-paper-plane me-2 icon"></i>
+                                    <span class="link-text"> Contact</span>
+                                    <span class="hover-underline"></span>
+                                </a>
+                            </li>
+                            
+                            <style>
+                                /* Styles généraux pour les liens */
+                                .link-item {
+                                    color: #2c3e50;
+                                    font-weight: 500;
+                                    border-radius: 4px;
+                                    transition: color 0.4s ease, background-color 0.4s ease;
+                                    overflow: hidden;
+                                    position: relative;
+                                }
+                            
+                                .icon {
+                                    font-size: 1.1rem;
+                                    transition: transform 0.3s ease, color 0.3s ease;
+                                }
+                            
+                                .link-text {
+                                    position: relative;
+                                    transition: letter-spacing 0.3s ease;
+                                }
+                            
+                                /* Effet de survol pour chaque lien */
+                                .link-item:hover {
+                                    color: #3498db; /* Valeur par défaut, change pour Contact */
+                                    background-color: rgba(52, 152, 219, 0.05); /* Valeur par défaut, change pour Contact */
+                                }
+                            
+                                .link-item:hover .icon {
+                                    color: #3498db; /* Valeur par défaut, change pour Contact */
+                                    transform: translateX(3px);
+                                }
+                            
+                                .link-item .hover-underline {
+                                    position: absolute;
+                                    bottom: 0;
+                                    left: 0;
+                                    width: 0;
+                                    height: 2px;
+                                    background-color: #3498db; /* Valeur par défaut, change pour Contact */
+                                    transition: width 0.4s ease;
+                                }
+                            
+                                .link-item:hover .hover-underline {
+                                    width: 100%;
+                                }
+                            
+                                /* Personnalisation des couleurs pour About et Contact */
+                                .link-item.about-link:hover {
+                                    color: #3498db;
+                                    background-color: rgba(52, 152, 219, 0.05);
+                                }
+                            
+                                .link-item.about-link:hover .icon {
+                                    color: #3498db;
+                                }
+                            
+                                .link-item.contact-link:hover {
+                                    color: #2ecc71;
+                                    background-color: rgba(46, 204, 113, 0.05);
+                                }
+                            
+                                .link-item.contact-link:hover .icon {
+                                    color: #2ecc71;
+                                    transform: translateX(3px) rotate(-15deg);
+                                }
+                            
+                                .link-item.contact-link .hover-underline {
+                                    background-color: #2ecc71;
+                                }
+                            
+                                /* Animation de pulsation lors de l'activation */
+                                @keyframes pulse {
+                                    0% { transform: scale(1); }
+                                    50% { transform: scale(1.05); }
+                                    100% { transform: scale(1); }
+                                }
+                            
+                                .link-item:active {
+                                    animation: pulse 0.3s ease;
+                                }
+                            
+                            </style>
+                            
+                                                        
+                                                       
+                                                     
+                        </ul>
+                        <ul class="navbar-nav">
+                            {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="#"><i class="fas fa-user-circle"></i> Bonjour {{ user.username }}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Déconnexion</a>
+                            </li>
+                            {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-user"></i> Connexion</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'register' %}"><i class="fas fa-user-plus"></i> Inscription</a>
+                            </li>
+                            {% endif %}
+                        </ul>                        
+                    </div>
+                </nav>
+            </div>
+        </div>
+        
+        <!-- Messages Django -->
+        {% if messages %}
+        <div class="row mt-3">
+            <div class="col-md-12">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
+        {% block content %}{% endblock %}
+      
+    </div>
+
+    <!-- Scripts JS -->
+    <!-- Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // 1. INITIALISATION DU PANIER
+            window.monPanier = JSON.parse(localStorage.getItem('panier')) || {};
+            
+            // 2. FONCTION DE MISE À JOUR COMPLÈTE
+            function mettreAJourPanier() {
+                // Calcul du total avec vérification de sécurité
+                const total = Object.values(window.monPanier).reduce((sum, item) => {
+                    return sum + (item && item.quantity ? parseInt(item.quantity) : 0);
+                }, 0);
+                
+                // Mise à jour du compteur avec animation
+                const $cartCount = $('.cart-count');
+                $cartCount.text(total);
+                $cartCount.parent().addClass('cart-bounce');
+                setTimeout(() => $cartCount.parent().removeClass('cart-bounce'), 500);
+                
+                // Génération du contenu du popover
+                let htmlContent = `
+                    <div class="cart-popover" style="min-width:280px">
+                        <div class="cart-header border-bottom pb-2 px-3">
+                            <h6 class="mb-0 font-weight-bold">Votre Panier (${total})</h6>
+                        </div>
+                        <div class="cart-body p-3">`;
+                
+                if (total === 0) {
+                    htmlContent += '<p class="text-muted my-2">Votre panier est vide</p>';
+                } else {
+                    htmlContent += '<ul class="list-unstyled mb-3">';
+                    for (const [id, item] of Object.entries(window.monPanier)) {
+                        if (item && item.name) {
+                            htmlContent += `
+                                <li class="py-2 border-bottom d-flex justify-content-between align-items-center">
+                                    <span class="text-truncate" style="max-width: 180px;">${item.name}</span>
+                                    <div>
+                                        <span class="badge bg-primary rounded-pill mr-2">${item.quantity}</span>
+                                        <button class="btn btn-sm btn-outline-danger remove-item" data-id="${id}">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </li>`;
+                        }
+                    }
+                    htmlContent += `</ul>
+                            <div class="d-grid gap-2">
+                                <a href="/checkout" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-credit-card mr-1"></i> Commander
+                                </a>
+                                <button class="btn btn-outline-danger btn-sm vider-panier">
+                                    <i class="fas fa-trash-alt mr-1"></i> Vider le panier
+                                </button>
+                            </div>`;
+                }
+                
+                htmlContent += '</div></div>';
+                
+                // Mise à jour dynamique du popover
+                const $panierBtn = $('#panier');
+                const isPopoverOpen = $panierBtn.next('.popover').length > 0;
+                
+                $panierBtn.attr('data-content', htmlContent);
+                
+                if (isPopoverOpen) {
+                    $panierBtn.popover('dispose').popover({
+                        html: true,
+                        content: htmlContent,
+                        trigger: 'focus'
+                    }).popover('show');
+                }
+            }
+            
+            // 3. FONCTION D'AJOUT AU PANIER (globale)
+            window.ajouterAuPanier = function(id, nom, quantite, prix, image) {
+                // Validation des données
+                if (!id || !nom || isNaN(quantite)) {
+                    console.error("Paramètres invalides pour ajouterAuPanier");
+                    return false;
+                }
+                
+                quantite = parseInt(quantite);
+                
+                // Initialisation ou mise à jour de l'article
+                window.monPanier[id] = window.monPanier[id] || {
+                    name: nom,
+                    quantity: 0,
+                    price: parseFloat(prix) || 0,
+                    image: image || ''
+                };
+                
+                window.monPanier[id].quantity += quantite;
+                
+                // Nettoyage des articles invalides
+                Object.keys(window.monPanier).forEach(key => {
+                    if (!window.monPanier[key] || !window.monPanier[key].name) {
+                        delete window.monPanier[key];
+                    }
+                });
+                
+                // Sauvegarde
+                localStorage.setItem('panier', JSON.stringify(window.monPanier));
+                
+                // Mise à jour de l'interface
+                mettreAJourPanier();
+                
+                // Animation de l'icône panier
+                $('#panier i').css('transform', 'scale(1.3)');
+                setTimeout(() => {
+                    $('#panier i').css('transform', 'scale(1)');
+                }, 500);
+                
+                return true;
+            };
+            
+            // 4. FONCTION DE SUPPRESSION D'ARTICLE
+            window.supprimerDuPanier = function(id) {
+                if (window.monPanier[id]) {
+                    delete window.monPanier[id];
+                    localStorage.setItem('panier', JSON.stringify(window.monPanier));
+                    mettreAJourPanier();
+                    return true;
+                }
+                return false;
+            };
+            
+            // 5. ÉVÉNEMENTS
+            $(document).on('click', '.vider-panier', function() {
+                window.monPanier = {};
+                localStorage.removeItem('panier');
+                mettreAJourPanier();
+            });
+            
+            $(document).on('click', '.remove-item', function() {
+                const id = $(this).data('id');
+                window.supprimerDuPanier(id);
+            });
+            
+            // 6. FONCTION DE RAFRAÎCHISSEMENT AVEC ANIMATION
+            window.refreshWithAnimation = function() {
+                // Crée l'animation
+                const refreshDiv = $('<div class="refresh-animation"></div>');
+                $('body').append(refreshDiv);
+                
+                // Rafraîchit après l'animation
+                setTimeout(() => {
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('refresh', Date.now());
+                    window.location.href = url.toString();
+                }, 800);
+            };
+            
+            // Initialisation
+            mettreAJourPanier();
+            $('#panier').popover({
+                html: true,
+                trigger: 'focus',
+                container: 'body'
+            });
+        });
+    </script>
+    
+    <style>
+        /* Animation du panier */
+        .cart-bounce {
+            animation: bounce 0.5s;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+        
+        /* Animation de rafraîchissement */
+        .refresh-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 9999;
+            pointer-events: none;
+            animation: fadeOut 0.8s ease-out forwards;
+        }
+        
+        @keyframes fadeOut {
+            0% { opacity: 0; }
+            20% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+        
+        /* Style du popover */
+        .cart-popover {
+            max-width: 300px;
+        }
+        
+        .cart-popover .badge {
+            font-size: 0.8rem;
+        }
+    </style>
+    
+    {% block js %}{% endblock %}
+</body>
+</html>

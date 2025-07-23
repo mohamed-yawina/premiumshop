@@ -1,0 +1,88 @@
+{% extends "shop/base.html" %}
+
+{% block title %}Connexion - PremiumShop{% endblock %}
+
+{% block content %}
+<style>
+    .login-card {
+        border: none;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .login-card:hover {
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .login-header {
+        background: linear-gradient(135deg, #0d6efd, #6610f2);
+        padding: 30px;
+        text-align: center;
+        color: white;
+        border-bottom: 3px solid #fff;
+    }
+
+    .login-header h3 {
+        margin: 0;
+        font-weight: bold;
+    }
+
+    .form-control:focus {
+        box-shadow: none;
+        border-color: #0d6efd;
+    }
+
+    .btn-primary {
+        background-color: #0d6efd;
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background-color: #0b5ed7;
+    }
+
+    .login-link a {
+        text-decoration: none;
+        color: #0d6efd;
+    }
+
+    .login-link a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card login-card shadow">
+                <div class="login-header">
+                    <h3><i class="fas fa-sign-in-alt me-2"></i> Connexion à PremiumShop </h3>
+                </div>
+                <div class="card-body p-4">
+                    {% if error %}
+                        <div class="alert alert-danger text-center">{{ error }}</div>
+                    {% endif %}
+                    <form method="POST" autocomplete="off">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Nom d'utilisateur</label>
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Entrez votre nom d'utilisateur" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Mot de passe</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Entrez votre mot de passe" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Se connecter</button>
+                        </div>
+                    </form>
+                    <div class="login-link text-center mt-4">
+                        <small>Pas encore de compte ? <a href="{% url 'register' %}">Inscrivez-vous ici</a></small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

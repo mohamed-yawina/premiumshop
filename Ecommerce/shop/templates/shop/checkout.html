@@ -1,0 +1,312 @@
+{% extends "shop/base.html" %}
+
+{% block title %}Mon Panier - PremiumShop{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <!-- Panier Section -->
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-primary text-white py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">
+                            <i class="fas fa-shopping-cart me-2"></i>Votre Panier
+                        </h3>
+                        <span class="badge bg-light text-primary fs-6">
+                            <span class="cart-count">0</span> article(s)
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-body p-0">
+                    <div class="list-group list-group-flush" id="item-list">
+                        <!-- Les éléments du panier seront insérés ici par JavaScript -->
+                    </div>
+                    
+                    <!-- Résumé de commande -->
+                    <div class="p-4 border-top">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Sous-total :</span>
+                            <span id="subtotal-price">0.00 MAD</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Livraison :</span>
+                            <span id="delivery-price">Gratuite</span>
+                        </div>
+                        <div class="d-flex justify-content-between fw-bold fs-5 mt-3 pt-2 border-top">
+                            <span>Total :</span>
+                            <span id="total-price">0.00 MAD</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-footer bg-light py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{% url 'home' %}" class="btn btn-primary">
+                            <i class="fas fa-arrow-left me-2"></i>Continuer vos achats
+                        </a>
+                        <div>
+                            <button class="btn btn-outline-danger me-2" id="clear-cart-btn">
+                                <i class="fas fa-trash me-1"></i>Vider le panier
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulaire de commande Section -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-success text-white py-3">
+                    <h3 class="mb-0"><i class="fas fa-credit-card me-2"></i>Informations de commande</h3>
+                </div>
+                
+                <div class="card-body p-4">
+                    <form method="POST" action="{% url 'checkout' %}">
+                        {% csrf_token %}
+                        <input type="hidden" id="items", name="items">
+    
+                        {% if error %}
+                            <div class="alert alert-danger">{{ error }}</div>
+                        {% endif %}
+                
+                        <div class="mb-3">
+                            <label for="nom" class="form-label">Nom complet</label>
+                            <input type="text" class="form-control" id="nom" name="nom" placeholder="Entrer votre nom complet" required>
+                        </div>
+                
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Adresse Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Entrer votre adresse email" required>
+                        </div>
+                
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Adresse</label>
+                            <input type="text" class="form-control" id="address" name="address" placeholder="Entrer votre address" required>
+                        </div>
+                
+                        <div class="mb-3">
+                            <label for="ville" class="form-label">Ville</label>
+                            <input type="text" class="form-control" id="ville" name="ville" placeholder="Entrer votre ville" required>
+                        </div>
+                            <div class="mb-3">
+                                <label for="pays" class="form-label">Pays</label>
+                                <select class="form-select" id="pays" name="pays" required>
+                                    <option value="" disabled selected>Choisir un pays</option>
+                                    <option value="France">France</option>
+                                    <option value="Maroc">Maroc</option>
+                                    <option value="Canada">Canada</option>
+                                    <option value="USA">États-Unis</option>
+                                    <option value="Allemagne">Allemagne</option>
+                                    <option value="Espagne">Espagne</option>
+                                    <option value="Italie">Italie</option>
+                                    <option value="Royaume-Uni">Royaume-Uni</option>
+                                    <option value="Belgique">Belgique</option>
+                                    <option value="Suisse">Suisse</option>
+                                    <option value="Luxembourg">Luxembourg</option>
+                                    <option value="Australie">Australie</option>
+                                    <option value="Pays-Bas">Pays-Bas</option>
+                                    <option value="Suisse">Suisse</option>
+                                    <option value="Belgique">Belgique</option>
+                                    <option value="Allemagne">Allemagne</option>
+                                </select>                            
+                        </div>
+                        <div class="mb-3">
+                            <label for="zipcode" class="form-label">Code Postal</label>
+                            <input type="text" class="form-control" id="zipcode" name="zipcode"  placeholder="Entrer votre code postal" required>
+                        </div>
+                
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="fas fa-check-circle me-2"></i>Valider la commande
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js %}
+<script>
+$(document).ready(function() {
+    // 1. FONCTION POUR CORRIGER LES URLS D'IMAGES
+    function fixImageUrl(url) {
+        if (!url) return '/static/shop/images/no-image.jpg';
+        if (url.startsWith('http') || url.startsWith('/')) return url;
+        return `/media/${url}`;
+    }
+
+    // 2. CHARGEMENT ET NETTOYAGE DU PANIER
+    let panier = JSON.parse(localStorage.getItem('panier')) || {};
+    
+    // Fonction pour nettoyer le panier
+    function cleanCart() {
+        const newCart = {};
+        
+        for (const [id, item] of Object.entries(panier)) {
+            // Ne garder que les articles valides
+            if (item && typeof item === 'object' && 
+                item.name && 
+                !isNaN(parseFloat(item.price)) && 
+                parseFloat(item.price) > 0 && 
+                parseInt(item.quantity) > 0) {
+                newCart[id] = {
+                    name: item.name,
+                    price: parseFloat(item.price),
+                    quantity: parseInt(item.quantity),
+                    image: fixImageUrl(item.image || '')
+                };
+            }
+        }
+        
+        panier = newCart;
+        localStorage.setItem('panier', JSON.stringify(panier));
+        return panier;
+    }
+
+    // Nettoyer le panier dès le chargement
+    panier = cleanCart();
+
+    // 3. AFFICHAGE DU PANIER
+    function displayCart() {
+        $('#item-list').empty();
+        let subtotal = 0;
+
+        if (Object.keys(panier).length === 0) {
+            showEmptyCart();
+            return;
+        }
+
+        // Affichage de chaque article
+        for (const [id, item] of Object.entries(panier)) {
+            const itemName = item.name || 'Produit sans nom';
+            const itemPrice = parseFloat(item.price) || 0;
+            const itemQuantity = parseInt(item.quantity) || 1;
+            const itemImage = item.image || '/static/shop/images/no-image.jpg';
+            const totalItem = itemPrice * itemQuantity;
+            
+            subtotal += totalItem;
+
+            $('#item-list').append(`
+                <div class="list-group-item py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center flex-grow-1">
+                            <img src="${itemImage}" alt="${itemName}" 
+                                 class="img-thumbnail me-3" style="width:80px;height:80px;object-fit:cover;">
+                            <div>
+                                <h5 class="mb-1">${itemName}</h5>
+                                <div class="text-muted">${itemPrice.toFixed(2)} MAD × ${itemQuantity}</div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <div class="text-end" style="width:100px">
+                                <h5 class="mb-0">${totalItem.toFixed(2)} MAD</h5>
+                            </div>
+                            <button class="btn btn-outline-danger ms-3 remove-btn" data-id="${id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `);
+        }
+
+        updateTotals(subtotal);
+    }
+
+    // 4. MISE À JOUR DES TOTAUX
+    function updateTotals(subtotal) {
+        subtotal = isNaN(subtotal) ? 0 : subtotal;
+        const deliveryFee = subtotal >= 300 ? 0 : 30;
+        const total = subtotal + deliveryFee;
+
+        $('#subtotal-price').text(subtotal.toFixed(2) + ' MAD');
+        $('#delivery-price').html(
+            deliveryFee === 0 
+                ? '<span class="text-success">Gratuite</span>' 
+                : deliveryFee.toFixed(2) + ' MAD'
+        );
+        $('#total-price').text(total.toFixed(2) + ' MAD');
+        $('.cart-count').text(Object.values(panier).reduce((sum, item) => sum + item.quantity, 0));
+        
+        $('#checkout-btn').toggleClass('disabled', subtotal <= 0);
+    }
+
+    // 5. GESTION DES ÉVÉNEMENTS
+    $(document).on('click', '.remove-btn', function() {
+        const id = $(this).data('id');
+        delete panier[id];
+        saveCart();
+    });
+
+    $('#clear-cart-btn').click(function() {
+        if (Object.keys(panier).length > 0 && confirm('Vider tout le panier ?')) {
+            panier = {};
+            saveCart();
+        }
+    });
+
+    // 6. SAUVEGARDE DU PANIER
+    function saveCart() {
+        panier = cleanCart(); // Nettoyer avant sauvegarde
+        localStorage.setItem('panier', JSON.stringify(panier));
+        displayCart();
+    }
+
+    // 7. AFFICHAGE PANIER VIDE
+    function showEmptyCart() {
+        $('#item-list').html(`
+            <div class="list-group-item text-center py-5">
+                <i class="fas fa-shopping-cart fa-4x text-muted mb-3"></i>
+                <h4 class="text-muted">Votre panier est vide</h4>
+                <a href="/" class="btn btn-primary mt-3">
+                    <i class="fas fa-arrow-left me-2"></i>Continuer vos achats
+                </a>
+            </div>
+        `);
+        updateTotals(0);
+        $('#checkout-btn, #clear-cart-btn').addClass('disabled');
+    }
+
+    // INITIALISATION
+    displayCart();
+
+    $('#items').val(JSON.stringify(panier));
+});
+</script>
+
+<style>
+    .list-group-item {
+        transition: background-color 0.3s ease;
+    }
+    
+    .list-group-item:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .img-thumbnail {
+        padding: 0.25rem;
+        background-color: #fff;
+    }
+    
+    #checkout-btn {
+        min-width: 200px;
+        transition: all 0.3s ease;
+    }
+    
+    #checkout-btn:hover:not(.disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    @media (max-width: 768px) {
+        .d-flex.align-items-center {
+            flex-direction: column;
+            align-items: flex-start !important;
+        }
+    }
+</style>
+{% endblock %}

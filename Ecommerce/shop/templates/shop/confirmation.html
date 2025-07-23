@@ -1,0 +1,15 @@
+<!-- shop/templates/shop/confirmation.html -->
+{% extends 'shop/base.html' %}
+
+{% block content %}
+<div class="container" style="max-width: 700px; margin: 50px auto; padding: 40px; background-color: #f8f9fa; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+    <div style="text-align: center;">
+        <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="Commande confirmée" width="100" style="margin-bottom: 20px;">
+        <h2 style="color: #28a745;">Merci pour votre commande !</h2>
+        <p style="font-size: 16px; color: #555;">Votre commande a été enregistrée avec succès. Vous recevrez un e-mail de confirmation dans quelques instants.</p>
+        <a href="{% url 'home' %}" style="display: inline-block; margin-top: 30px; padding: 12px 25px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            Retour à la boutique
+        </a>
+    </div>
+</div>
+{% endblock %}
